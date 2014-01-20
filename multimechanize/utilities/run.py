@@ -92,7 +92,7 @@ def run_test(project_name, cmd_opts, remote_starter=None):
     for i, ug_config in enumerate(user_group_configs):
         script_file = os.path.join(script_prefix, ug_config.script_file)
         ug = core.UserGroup(queue, i, ug_config.name, ug_config.num_threads,
-                            script_file, run_time, rampup)
+                            script_file, run_time, rampup, ug_config)
         user_groups.append(ug)
     for user_group in user_groups:
         user_group.start()
@@ -217,18 +217,23 @@ def configure(project_name, cmd_opts, config_file=None):
             threads = config.getint(section, 'threads')
             script = config.get(section, 'script')
             user_group_name = section
-            ug_config = UserGroupConfig(threads, user_group_name, script)
+
+            all_items = dict(config.items(section))
+
+            ug_config = UserGroupConfig(threads, user_group_name, script, all_items)
             user_group_configs.append(ug_config)
+
 
     return (run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs)
 
 
 
 class UserGroupConfig(object):
-    def __init__(self, num_threads, name, script_file):
+    def __init__(self, num_threads, name, script_file, all_items):
         self.num_threads = num_threads
         self.name = name
         self.script_file = script_file
+        self.all_items = all_items
 
 
 
