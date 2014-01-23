@@ -45,6 +45,7 @@ def main():
     parser.add_option('-r', '--results', dest='results_dir', help='results directory to reprocess')
     parser.add_option('-b', '--bind-addr', dest='bind_addr', help='rpc bind address', default='localhost')
     parser.add_option('-d', '--directory', dest='projects_dir', help='directory containing project folder', default='.')
+    parser.add_option('-o', '--output', dest='output_dir', help='directory to please output to')
     cmd_opts, args = parser.parse_args()
 
     try:
@@ -77,7 +78,10 @@ def run_test(project_name, cmd_opts, remote_starter=None):
     run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs = configure(project_name, cmd_opts)
 
     run_localtime = time.localtime()
-    output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name, time.strftime('%Y.%m.%d_%H.%M.%S/', run_localtime))
+    if cmd_opts.output_dir:
+        output_dir = '%s/results_%s_%s' % (cmd_opts.output_dir, project_name, time.strftime('%Y.%m.%d_%H.%M.%S/', run_localtime),)
+    else:
+        output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name, time.strftime('%Y.%m.%d_%H.%M.%S/', run_localtime))
 
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
