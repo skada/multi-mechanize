@@ -9,6 +9,7 @@ import inspect
 import os.path
 import sys
 
+
 class InvalidScriptError(StandardError):
     """
     Should be raised when a Script does not confirm to required interface.
@@ -17,6 +18,7 @@ class InvalidScriptError(StandardError):
       - Transaction class exists.
       - Transaction.run() method exists.
     """
+
 
 class ScriptValidator(object):
     """
@@ -33,15 +35,15 @@ class ScriptValidator(object):
         transaction_class = getattr(module, "Transaction", None)
         if not transaction_class:
             return "{module}.Transaction class missing".format(
-                        module=module.__name__)
+                module=module.__name__)
         run_method = getattr(transaction_class, "run", None)
         if not run_method:
             return "{module}.Transaction.run() method is missing".format(
-                        module=module.__name__)
+                module=module.__name__)
         if not callable(run_method):
             return "{module}.Transaction.run() method is not callable".format(
-                        module=module.__name__)
-        # -- EVERYTHING CHECKED: No problems detected.
+                module=module.__name__)
+            # -- EVERYTHING CHECKED: No problems detected.
         return None
 
     @classmethod
@@ -54,6 +56,7 @@ class ScriptValidator(object):
         if problem:
             raise InvalidScriptError, problem
 
+
 class ScriptLoader(object):
     """Utility class to load scripts as python modules."""
 
@@ -64,7 +67,7 @@ class ScriptLoader(object):
         :returns: Loaded script module-
         :raise: ImportError, when script module cannot be loaded.
         """
-        module_name    = inspect.getmodulename(path).replace("-", "_")
+        module_name = inspect.getmodulename(path).replace("-", "_")
         module_dirname = os.path.dirname(path)
         if not module_dirname:
             module_dirname = os.curdir

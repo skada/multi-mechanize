@@ -28,7 +28,6 @@ NODES = [
 ]
 
 
-
 class Application:
     def __init__(self, root, hosts):
         self.hosts = hosts
@@ -47,16 +46,13 @@ class Application:
         self.text_box = ScrolledText.ScrolledText(self.root, width=59, height=24, font=('Helvetica', 9))
         self.text_box.place(x=162, y=5)
 
-
     def clear_window(self):
         self.text_box.delete(1.0, Tkinter.END)
-
 
     def list_nodes(self):
         self.clear_window()
         for host, port in self.hosts:
             self.text_box.insert(Tkinter.END, '%s:%s\n' % (host, port))
-
 
     def run_tests(self):
         self.clear_window()
@@ -68,7 +64,6 @@ class Application:
             except socket.error:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
 
-
     def get_configs(self):
         self.clear_window()
         for host, port in self.hosts:
@@ -78,7 +73,6 @@ class Application:
                 self.text_box.insert(Tkinter.END, '%s:%s config:\n%s\n\n\n' % (host, port, config))
             except socket.error:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
-
 
     def update_configs(self):
         self.clear_window()
@@ -91,7 +85,6 @@ class Application:
             except socket.error:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
 
-
     def get_results(self):
         self.clear_window()
         for host, port in self.hosts:
@@ -102,7 +95,6 @@ class Application:
             except socket.error:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
 
-
     def get_project_names(self):
         self.clear_window()
         for host, port in self.hosts:
@@ -112,7 +104,6 @@ class Application:
                 self.text_box.insert(Tkinter.END, '%s:%s project name:\n%s\n\n' % (host, port, name))
             except socket.error:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
-
 
     def check_servers(self):
         self.clear_window()
@@ -125,11 +116,10 @@ class Application:
                 self.text_box.insert(Tkinter.END, 'can not make connection to: %s:%s\n' % (host, port))
 
 
-
 def main():
     hosts = [(host_port.split(':')[0], host_port.split(':')[1]) for host_port in NODES]
     root = Tkinter.Tk()
-    app = Application(root, hosts)
+    Application(root, hosts)
     root.mainloop()
 
 

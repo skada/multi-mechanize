@@ -13,11 +13,9 @@ class Report(object):
         self.fn = results_dir + 'results.html'
         self.write_head_html()
 
-
     def write_line(self, line):
         with open(self.fn, 'a') as f:
             f.write('%s\n' % line)
-
 
     def write_head_html(self):
         with open(self.fn, 'w') as f:
@@ -91,7 +89,6 @@ class Report(object):
 </head>
 <body>
 """)
-
 
     def write_closing_html(self):
         with open(self.fn, 'a') as f:

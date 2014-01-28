@@ -14,7 +14,6 @@ import reportwriter
 import reportwriterxml
 
 
-
 def output_results(results_dir, results_file, run_time, rampup, ts_interval, user_group_configs=None, xml_reports=False):
     results = Results(results_dir + results_file, run_time)
 
@@ -79,7 +78,6 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     ))
     report.write_line('</table>')
 
-
     # all transactions - interval details
     avg_resptime_points = {}  # {intervalnumber: avg_resptime}
     percentile_80_resptime_points = {}  # {intervalnumber: 80pct_resptime}
@@ -113,7 +111,6 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     report.write_line('</table>')
     graph.resp_graph(avg_resptime_points, percentile_80_resptime_points, percentile_90_resptime_points, 'All_Transactions_response_times_intervals.png', results_dir)
 
-
     report.write_line('<h3>Graphs</h3>')
     report.write_line('<h4>Response Time: %s sec time-series</h4>' % ts_interval)
     report.write_line('<img src="All_Transactions_response_times_intervals.png"></img>')
@@ -122,8 +119,6 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     report.write_line('<h4>Throughput: 5 sec time-series</h4>')
     report.write_line('<img src="All_Transactions_throughput.png"></img>')
 
-
-
     # all transactions - throughput
     throughput_points = {}  # {intervalnumber: numberofrequests}
     interval_secs = ts_interval
@@ -131,8 +126,6 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     for i, bucket in enumerate(splat_series):
         throughput_points[int((i + 1) * interval_secs)] = (len(bucket) / interval_secs)
     graph.tp_graph(throughput_points, 'All_Transactions_throughput.png', results_dir)
-
-
 
     # custom timers
     for timer_name in sorted(results.uniq_timer_names):
@@ -173,7 +166,6 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
         ))
         report.write_line('</table>')
 
-
         # custom timers - interval details
         avg_resptime_points = {}  # {intervalnumber: avg_resptime}
         percentile_80_resptime_points = {}  # {intervalnumber: 80pct_resptime}
@@ -207,7 +199,6 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
         report.write_line('</table>')
         graph.resp_graph(avg_resptime_points, percentile_80_resptime_points, percentile_90_resptime_points, timer_name + '_response_times_intervals.png', results_dir)
 
-
         report.write_line('<h3>Graphs</h3>')
         report.write_line('<h4>Response Time: %s sec time-series</h4>' % ts_interval)
         report.write_line('<img src="%s_response_times_intervals.png"></img>' % timer_name)
@@ -215,8 +206,6 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
         report.write_line('<img src="%s_response_times.png"></img>' % timer_name)
         report.write_line('<h4>Throughput: %s sec time-series</h4>' % ts_interval)
         report.write_line('<img src="%s_throughput.png"></img>' % timer_name)
-
-
 
     ## user group times
     #for user_group_name in sorted(results.uniq_user_group_names):
@@ -237,8 +226,6 @@ def output_results(results_dir, results_file, run_time, rampup, ts_interval, use
     report.write_closing_html()
 
 
-
-
 class Results(object):
     def __init__(self, results_file_name, run_time):
         self.results_file_name = results_file_name
@@ -254,8 +241,6 @@ class Results(object):
         self.epoch_finish = self.resp_stats_list[-1].epoch_secs
         self.start_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_start))
         self.finish_datetime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.epoch_finish))
-
-
 
     def __parse_file(self):
         f = open(self.results_file_name, 'rb')
@@ -300,7 +285,6 @@ class Results(object):
         return resp_stats_list
 
 
-
 class ResponseStats(object):
     def __init__(self, request_num, elapsed_time, epoch_secs, user_group_name, trans_time, error, custom_timers):
         self.request_num = request_num
@@ -310,7 +294,6 @@ class ResponseStats(object):
         self.trans_time = trans_time
         self.error = error
         self.custom_timers = custom_timers
-
 
 
 def split_series(points, interval):
@@ -323,11 +306,9 @@ def split_series(points, interval):
     return series
 
 
-
 def average(seq):
     avg = (float(sum(seq)) / len(seq))
     return avg
-
 
 
 def standard_dev(seq):
@@ -340,13 +321,10 @@ def standard_dev(seq):
     return stdev
 
 
-
 def percentile(seq, percentile):
     i = int(len(seq) * (percentile / 100.0))
     seq.sort()
     return seq[i]
-
-
 
 
 if __name__ == '__main__':

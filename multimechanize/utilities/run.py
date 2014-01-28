@@ -34,6 +34,7 @@ import multimechanize.resultswriter as resultswriter
 import multimechanize.progressbar as progressbar
 from multimechanize import __version__ as VERSION
 
+
 def main():
     """
     Main function to run multimechanize benchmark/performance test.
@@ -67,7 +68,6 @@ def main():
     else:
         run_test(project_name, cmd_opts)
     return
-
 
 
 def run_test(project_name, cmd_opts, remote_starter=None):
@@ -125,7 +125,7 @@ def run_test(project_name, cmd_opts, remote_starter=None):
 
             print p
 
-        while [user_group for user_group in user_groups if user_group.is_alive()] != []:
+        while [user_group for user_group in user_groups if user_group.is_alive()]:
             if progress_bar:
                 if sys.platform.startswith('win'):
                     print 'waiting for all requests to finish...\r',
@@ -138,7 +138,7 @@ def run_test(project_name, cmd_opts, remote_starter=None):
             print
 
     # all agents are done running at this point
-    time.sleep(.2) # make sure the writer queue is flushed
+    time.sleep(.2)  # make sure the writer queue is flushed
     print '\n\nanalyzing results...\n'
     results.output_results(output_dir, 'results.csv', run_time, rampup, results_ts_interval, user_group_configs, xml_report)
     print 'created: %sresults.html\n' % output_dir
@@ -155,7 +155,7 @@ def run_test(project_name, cmd_opts, remote_starter=None):
         print 'loading results into database: %s\n' % results_database
         import multimechanize.resultsloader
         multimechanize.resultsloader.load_results_database(project_name, run_localtime, output_dir, results_database,
-                run_time, rampup, results_ts_interval, user_group_configs)
+            run_time, rampup, results_ts_interval, user_group_configs)
 
     if post_run_script is not None:
         print 'running post_run_script: %s\n' % post_run_script
@@ -170,7 +170,6 @@ def run_test(project_name, cmd_opts, remote_starter=None):
     return
 
 
-
 def rerun_results(project_name, cmd_opts, results_dir):
     output_dir = '%s/%s/results/%s/' % (cmd_opts.projects_dir, project_name, results_dir)
     saved_config = '%s/config.cfg' % output_dir
@@ -181,7 +180,6 @@ def rerun_results(project_name, cmd_opts, results_dir):
     if xml_report:
         print 'created: %sresults.jtl' % output_dir
         print 'created: last_results.jtl\n'
-
 
 
 def configure(project_name, cmd_opts, config_file=None):
@@ -227,9 +225,8 @@ def configure(project_name, cmd_opts, config_file=None):
             ug_config = UserGroupConfig(threads, user_group_name, script, all_items)
             user_group_configs.append(ug_config)
 
-
-    return (run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database, post_run_script, xml_report, user_group_configs)
-
+    return (run_time, rampup, results_ts_interval, console_logging, progress_bar, results_database,
+            post_run_script, xml_report, user_group_configs)
 
 
 class UserGroupConfig(object):
@@ -238,7 +235,6 @@ class UserGroupConfig(object):
         self.name = name
         self.script_file = script_file
         self.all_items = all_items
-
 
 
 if __name__ == '__main__':

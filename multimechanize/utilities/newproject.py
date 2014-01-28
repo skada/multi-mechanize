@@ -15,7 +15,6 @@ CONFIG_NAME = 'config.cfg'
 SCRIPT_NAME = 'v_user.py'
 SCRIPTS_DIR = 'test_scripts'
 
-
 CONFIG_CONTENT = """
 [global]
 run_time = 30
@@ -35,7 +34,6 @@ threads = 3
 script = %s
 
 """ % (SCRIPT_NAME, SCRIPT_NAME)
-
 
 SCRIPT_CONTENT = """
 import random
@@ -60,13 +58,13 @@ if __name__ == '__main__':
 
 
 def create_project(
-        project_name,
-        config_name=CONFIG_NAME,
-        script_name=SCRIPT_NAME,
-        scripts_dir=SCRIPTS_DIR,
-        config_content=CONFIG_CONTENT,
-        script_content=SCRIPT_CONTENT,
-    ):
+    project_name,
+    config_name=CONFIG_NAME,
+    script_name=SCRIPT_NAME,
+    scripts_dir=SCRIPTS_DIR,
+    config_content=CONFIG_CONTENT,
+    script_content=SCRIPT_CONTENT,
+):
     if os.path.exists(project_name):
         sys.stderr.write('\nERROR: project already exists: %s\n\n' % project_name)
         sys.exit(1)
