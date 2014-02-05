@@ -83,9 +83,10 @@ def run_test(project_name, cmd_opts, remote_starter=None):
     else:
         output_dir = '%s/%s/results/results_%s' % (cmd_opts.projects_dir, project_name, time.strftime('%Y.%m.%d_%H.%M.%S/', run_localtime))
 
+    start_time = time.time()
     # this queue is shared between all processes/threads
     queue = multiprocessing.Queue()
-    rw = resultswriter.ResultsWriter(queue, output_dir, console_logging)
+    rw = resultswriter.ResultsWriter(project_name, start_time, queue, output_dir, console_logging)
     rw.daemon = True
     rw.start()
 

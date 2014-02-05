@@ -15,7 +15,7 @@ import sys
 
 
 class ResultsWriter(threading.Thread):
-    def __init__(self, queue, output_dir, console_logging):
+    def __init__(self, test_name, test_start, queue, output_dir, console_logging):
         threading.Thread.__init__(self)
         self.queue = queue
         self.console_logging = console_logging
@@ -23,6 +23,8 @@ class ResultsWriter(threading.Thread):
         self.trans_count = 0
         self.timer_count = 0
         self.error_count = 0
+        self.test_name = test_name
+        self.test_start = test_start
 
         try:
             os.makedirs(self.output_dir, 0755)
@@ -42,7 +44,10 @@ class ResultsWriter(threading.Thread):
                         error = '\\n'.join(error.splitlines())
 
                         self.error_count += 1
-                    f.write('%i,%.3f,%i,%s,%f,%s,%s\n' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, error, repr(custom_timers)))
+                    custom_timers_str = ' '.join(['%s=%s' % (k,v) for k,v in custom_timers.iteritems()])
+                    f.write('%s,%s,%i,%.3f,%i,%s,%f,%s,%s\n' % (self.test_name, self.test_start, self.trans_count,
+                                                                elapsed, epoch, self.user_group_name, scriptrun_time,
+                                                                error, "%s" % custom_timers_str))
                     f.flush()
                     if self.console_logging:
                         print '%i, %.3f, %i, %s, %.3f, %s, %s' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, error, repr(custom_timers))
