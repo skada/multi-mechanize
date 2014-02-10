@@ -26,6 +26,17 @@ class ResultsWriter(threading.Thread):
         self.test_name = test_name
         self.test_start = test_start
 
+        self.names = (
+            'test_name',
+            'test_start',
+            'trans_count',
+            'elapsed',
+            'epoch',
+            'user_group_name',
+            'script_run_time',
+            'error',
+        )
+
         try:
             os.makedirs(self.output_dir, 0755)
         except OSError:
@@ -34,22 +45,39 @@ class ResultsWriter(threading.Thread):
 
     def run(self):
         with open(self.output_dir + 'results.csv', 'w') as f:
-            while True:
-                try:
-                    elapsed, epoch, self.user_group_name, scriptrun_time, error, custom_timers = self.queue.get(False)
-                    self.trans_count += 1
-                    self.timer_count += len(custom_timers)
-                    if error != '':
-                        # Convert line breaks to literal \n so the CSV will be readable.
-                        error = '\\n'.join(error.splitlines())
+            with open(self.output_dir + 'results.spl', 'w') as s:
+                while True:
+                    try:
+                        elapsed, epoch, self.user_group_name, scriptrun_time, error, custom_timers = self.queue.get(False)
+                        self.trans_count += 1
+                        self.timer_count += len(custom_timers)
+                        if error != '':
+                            # Convert line breaks to literal \n so the CSV will be readable.
+                            error = '\\n'.join(error.splitlines())
 
-                        self.error_count += 1
-                    custom_timers_str = ' '.join(['%s=%s' % (k,v) for k,v in custom_timers.iteritems()])
-                    f.write('%s,%s,%i,%.3f,%i,%s,%f,%s,%s\n' % (self.test_name, self.test_start, self.trans_count,
-                                                                elapsed, epoch, self.user_group_name, scriptrun_time,
-                                                                error, "%s" % custom_timers_str))
-                    f.flush()
-                    if self.console_logging:
-                        print '%i, %.3f, %i, %s, %.3f, %s, %s' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, error, repr(custom_timers))
-                except Queue.Empty:
-                    time.sleep(.05)
+                            self.error_count += 1
+                        custom_timers_str = ' '.join(['%s=%s' % (k,v) for k,v in custom_timers.iteritems()])
+                        data_dict = dict(zip(self.names, (
+                            self.test_name,
+                            self.test_start,
+                            self.trans_count,
+                            elapsed,
+                            epoch,
+                            self.user_group_name,
+                            scriptrun_time,
+                            error,
+                        )))
+
+                        data = ','.join(['%s=%s' % (k,v) for k,v in data_dict.iteritems() if v])
+                        data = ','.join(data, custom_timers_str)
+                        data += '\n'
+                        s.write(data)
+                        s.flush()
+
+                        f.write('%i,%.3f,%i,%s,%f,%s,%s\n' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time,
+                                                                    error, "%s" % custom_timers_str))
+                        f.flush()
+                        if self.console_logging:
+                            print '%i, %.3f, %i, %s, %.3f, %s, %s' % (self.trans_count, elapsed, epoch, self.user_group_name, scriptrun_time, error, repr(custom_timers))
+                    except Queue.Empty:
+                        time.sleep(.05)
