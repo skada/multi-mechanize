@@ -69,7 +69,7 @@ class ResultsWriter(threading.Thread):
                         )))
 
                         data = ','.join(['%s=%s' % (k,v) for k,v in data_dict.iteritems() if v])
-                        data = ','.join(data, custom_timers_str)
+                        data = ','.join((data, custom_timers_str,))
                         data += '\n'
                         s.write(data)
                         s.flush()
