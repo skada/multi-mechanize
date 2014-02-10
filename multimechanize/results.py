@@ -252,12 +252,12 @@ class Results(object):
                 continue
             fields = line.strip().split(',')
 
-            request_num = int(fields[2])
-            elapsed_time = float(fields[3])
-            epoch_secs = int(fields[4])
-            user_group_name = fields[5]
-            trans_time = float(fields[6])
-            error = fields[7]
+            request_num = int(fields[0])
+            elapsed_time = float(fields[1])
+            epoch_secs = int(fields[2])
+            user_group_name = fields[3]
+            trans_time = float(fields[4])
+            error = fields[5]
 
             self.uniq_user_group_names.add(user_group_name)
 
