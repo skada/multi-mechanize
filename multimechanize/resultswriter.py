@@ -27,11 +27,11 @@ class ResultsWriter(threading.Thread):
         self.test_start = test_start
 
         self.names = (
+            'epoch',
             'test_name',
             'test_start',
             'trans_count',
             'elapsed',
-            'epoch',
             'user_group_name',
             'script_run_time',
             'error',
@@ -58,11 +58,11 @@ class ResultsWriter(threading.Thread):
                             self.error_count += 1
                         custom_timers_str = ' '.join(['%s=%s' % (k,v) for k,v in custom_timers.iteritems()])
                         data_dict = dict(zip(self.names, (
+                            epoch,
                             self.test_name,
                             self.test_start,
                             self.trans_count,
                             elapsed,
-                            epoch,
                             self.user_group_name,
                             scriptrun_time,
                             error,
